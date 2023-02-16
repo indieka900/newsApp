@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:news_app/views/article.dart';
 import 'package:news_app/views/category.dart';
 import 'package:intl/intl.dart';
+import 'package:news_app/views/search_news.dart';
 import 'package:news_app/views/sources.dart';
 //import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -22,7 +23,11 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<CategoryModel> categories = <CategoryModel>[];
   List<ArticleModel> articles = <ArticleModel>[];
+  final _textController = TextEditingController();
+
   bool _loading = true;
+
+  bool _isSearching = false;
 
   @override
   void initState() {
@@ -46,27 +51,56 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const <Widget>[
-            Text(
-              'Trending',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w800,
-                fontSize: 25,
+        title: !_isSearching
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+                  Text(
+                    'Trending',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 25,
+                    ),
+                  ),
+                  Text(
+                    'News',
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 25,
+                    ),
+                  ),
+                ],
+              )
+            : TextField(
+                controller: _textController,
+                style: const TextStyle(color: Colors.white),
+                onSubmitted: (value) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Searched(source: value),
+                    ),
+                  );
+                  _textController.clear();
+                },
+                decoration: const InputDecoration(
+                  hintText: "Search any categories",
+                  hintStyle: TextStyle(color: Colors.green),
+                ),
               ),
-            ),
-            Text(
-              'News',
-              style: TextStyle(
-                color: Colors.green,
-                fontSize: 25,
-              ),
-            ),
-          ],
-        ),
         actions: [
+          IconButton(
+            onPressed: () {
+              setState(() {
+                _isSearching = !_isSearching;
+              });
+            },
+            icon: Icon(
+              !_isSearching ? Icons.search : Icons.clear,
+              color: Colors.green,
+            ),
+          ),
           PopupMenuButton(
             itemBuilder: (context) => [
               const PopupMenuItem(
@@ -113,7 +147,10 @@ class _HomeState extends State<Home> {
             onSelected: (String newvalue) {
               setState(() {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => NewsSorces(source: newvalue),
+                  builder: (context) => NewsSorces(
+                    source: newvalue,
+                    title: newvalue,
+                  ),
                 ));
               });
             },
@@ -185,6 +222,12 @@ class _HomeState extends State<Home> {
               ),
             ),
     );
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
   }
 }
 
@@ -306,9 +349,21 @@ class Blogtile extends StatelessWidget {
           children: [
             Stack(
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.network(imageUrl),
+                Container(
+                  height: 180,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(imageUrl),
+                    ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+
+                  // child: ClipRRect(
+                  //   borderRadius: BorderRadius.circular(15),
+                  //   child: Image.network(imageUrl),
+                  // ),
                 ),
                 Positioned(
                   bottom: 10,

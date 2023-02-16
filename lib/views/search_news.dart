@@ -3,16 +3,15 @@ import 'package:news_app/helper/news.dart';
 import 'package:news_app/model/article_model.dart';
 import 'package:news_app/views/home.dart';
 
-class NewsSorces extends StatefulWidget {
+class Searched extends StatefulWidget {
   final String source;
-  final String title;
-  const NewsSorces({super.key, required this.source, required this.title});
+  const Searched({super.key, required this.source});
 
   @override
-  State<NewsSorces> createState() => _NewsSorcesState();
+  State<Searched> createState() => _SearchedState();
 }
 
-class _NewsSorcesState extends State<NewsSorces> {
+class _SearchedState extends State<Searched> {
   List<ArticleModel> articles = <ArticleModel>[];
 
   @override
@@ -22,7 +21,7 @@ class _NewsSorcesState extends State<NewsSorces> {
   }
 
   getNews() async {
-    NewsSource newsClass = NewsSource();
+    SearchNews newsClass = SearchNews();
     await newsClass.getNews(widget.source);
     articles = newsClass.news;
     setState(() {
@@ -36,18 +35,19 @@ class _NewsSorcesState extends State<NewsSorces> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios_new,
-                color: Colors.white,
-              ),),
-        title: Text(
-          widget.title.toUpperCase(),
-          style: const TextStyle(
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+          ),
+        ),
+        title: const Text(
+          'Search Results',
+          style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w800,
             fontSize: 20,
