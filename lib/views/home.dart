@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:news_app/views/article.dart';
 import 'package:news_app/views/category.dart';
 import 'package:intl/intl.dart';
+import 'package:news_app/views/sources.dart';
 //import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Home extends StatefulWidget {
@@ -49,7 +50,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: const <Widget>[
             Text(
-              'Trenting',
+              'Trending',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w800,
@@ -65,6 +66,60 @@ class _HomeState extends State<Home> {
             ),
           ],
         ),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'abc-news',
+                child: Text('ABC News'),
+              ),
+              const PopupMenuItem(
+                value: 'associated-press',
+                child: Text('Associated-press News'),
+              ),
+              const PopupMenuItem(
+                value: 'australian-financial-review',
+                child: Text('Australian News'),
+              ),
+              const PopupMenuItem(
+                value: 'bbc-news',
+                child: Text('BBC News'),
+              ),
+              const PopupMenuItem(
+                value: 'cnn',
+                child: Text('CNN News'),
+              ),
+              const PopupMenuItem(
+                value: 'cbc-news',
+                child: Text('CBC News'),
+              ),
+              const PopupMenuItem(
+                value: 'entertainment-weekly',
+                child: Text('Entertainment-weekly'),
+              ),
+              const PopupMenuItem(
+                value: 'google-news',
+                child: Text('GOOGLE News'),
+              ),
+              const PopupMenuItem(
+                value: 'fox-sports',
+                child: Text('Fox sports News'),
+              ),
+              const PopupMenuItem(
+                value: 'hacker-news',
+                child: Text('HACKER News'),
+              ),
+            ],
+            onSelected: (String newvalue) {
+              setState(() {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => NewsSorces(source: newvalue),
+                ));
+              });
+            },
+            color: Colors.green,
+          ),
+        ],
       ),
       body: _loading
           ? Container(
@@ -85,7 +140,10 @@ class _HomeState extends State<Home> {
               ),
             )
           : RefreshIndicator(
-              onRefresh: () => getNews(),
+              onRefresh: () {
+                articles.clear;
+                return getNews();
+              },
               child: SingleChildScrollView(
                 child: Container(
                   padding: const EdgeInsets.all(10),

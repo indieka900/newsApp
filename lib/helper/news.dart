@@ -16,9 +16,9 @@ class News {
       'newsapi.org',
       '/v2/top-headlines',
       {
-        'country': 'us',
-        //'sources':'bbc-news',
-        'category': 'general',
+        // 'country': 'us',
+        'sources':'bbc-news',
+        // 'category': 'general',
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
     );
@@ -56,6 +56,81 @@ class NewsCategory {
       {
         'q': category,
         'from': yesterdayDate,
+        // 'sortBy': 'popularity',
+        'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
+      },
+    );
+
+    var response = await http.get(uri);
+    var json = jsonDecode(response.body);
+    if (json['status'] == 'ok') {
+      json['articles'].forEach((element) {
+        if (element['urlToImage'] != null && element['description'] != null) {
+          ArticleModel articlemodel = ArticleModel(
+            title: element['title'],
+            description: element['description'],
+            url: element['url'],
+            urlToImage: element['urlToImage'],
+            auther: element['author'],
+            content: element['content'],
+            publishAT: element['publishedAt'],
+          );
+          news.add(articlemodel);
+        }
+      });
+    }
+  }
+}
+
+class NewsSource {
+  List<ArticleModel> news = [];
+  
+
+  Future<void> getNews(String source) async {
+    var uri = Uri.https(
+      'newsapi.org',
+      '/v2/everything',
+      {
+        // 'country': 'us',
+        'sources':source,
+        "language": "en",
+        // 'category': 'general',
+        'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
+      },
+    );
+
+    var response = await http.get(uri);
+    var json = jsonDecode(response.body);
+    if (json['status'] == 'ok') {
+      json['articles'].forEach((element) {
+        if (element['urlToImage'] != null && element['description'] != null) {
+          ArticleModel articlemodel = ArticleModel(
+            title: element['title'],
+            description: element['description'],
+            url: element['url'],
+            urlToImage: element['urlToImage'],
+            auther: element['author'],
+            content: element['content'],
+            publishAT: element['publishedAt'],
+          );
+          news.add(articlemodel);
+        }
+      });
+    }
+  }
+}
+
+class SearchNews {
+  List<ArticleModel> news = [];
+  
+
+  Future<void> getNews(String sNews) async {
+    var uri = Uri.https(
+      'newsapi.org',
+      '/v2/everything',
+      {
+        'q': sNews,
+        'from': yesterdayDate,
         'sortBy': 'popularity',
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
@@ -81,3 +156,4 @@ class NewsCategory {
     }
   }
 }
+
