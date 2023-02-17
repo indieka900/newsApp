@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/helper/news.dart';
 import 'package:news_app/model/article_model.dart';
+import 'package:news_app/views/blog_tile.dart';
 import 'package:news_app/views/home.dart';
 
 class NewsSorces extends StatefulWidget {

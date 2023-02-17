@@ -5,7 +5,7 @@ List<CategoryModel> getCategories() {
   CategoryModel categoryModel = CategoryModel();
 
   //1
-  
+
   categoryModel.categoryName = "Business";
   categoryModel.imageUrl =
       'https://images.unsplash.com/photo-1665686306574-1ace09918530?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80';
@@ -34,7 +34,7 @@ List<CategoryModel> getCategories() {
 
   //5
   categoryModel = CategoryModel();
-  categoryModel.categoryName = "Premier league";
+  categoryModel.categoryName = "Sports";
   categoryModel.imageUrl =
       'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8M3x8c3BvcnRzfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60';
   category.add(categoryModel);

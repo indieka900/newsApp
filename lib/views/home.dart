@@ -5,13 +5,10 @@ import 'package:news_app/helper/data.dart';
 import 'package:news_app/helper/news.dart';
 import 'package:news_app/model/article_model.dart';
 import 'package:news_app/model/category_model.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:news_app/views/article.dart';
-import 'package:news_app/views/category.dart';
-import 'package:intl/intl.dart';
+import 'package:news_app/views/blog_tile.dart';
 import 'package:news_app/views/search_news.dart';
+import 'package:news_app/views/shortcut.dart';
 import 'package:news_app/views/sources.dart';
-//import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -83,8 +80,13 @@ class _HomeState extends State<Home> {
                     ),
                   );
                   _textController.clear();
+                  _isSearching = false;
                 },
                 decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                  border: InputBorder.none,
+                  fillColor: Color.fromARGB(255, 77, 75, 75),
+                  filled: true,
                   hintText: "Search any categories",
                   hintStyle: TextStyle(color: Colors.green),
                 ),
@@ -228,184 +230,5 @@ class _HomeState extends State<Home> {
   void dispose() {
     _textController.dispose();
     super.dispose();
-  }
-}
-
-class Subtitle extends StatelessWidget {
-  final String imageUrl, name;
-  const Subtitle({
-    super.key,
-    required this.imageUrl,
-    required this.name,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) {
-              return CategoryViews(
-                category: name.toLowerCase(),
-                title: name,
-              );
-            },
-          ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.only(right: 15),
-        child: Stack(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                height: 60,
-                width: 120,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              height: 60,
-              width: 120,
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                name,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class Blogtile extends StatelessWidget {
-  final String imageUrl, title, desc, url, now;
-
-  const Blogtile({
-    super.key,
-    required this.imageUrl,
-    required this.title,
-    required this.desc,
-    required this.url,
-    required this.now,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    DateTime dateTime = DateFormat("yyyy-MM-ddTHH:mm:ssZ").parse(now);
-    // Calculate the difference between the current time and the parsed date
-    Duration difference = DateTime.now().difference(dateTime);
-
-    // Helper function to format a duration as a human-readable string
-    String formatDuration(Duration duration) {
-      if (duration.inSeconds < 60) {
-        return "${duration.inSeconds} seconds ago";
-      } else if (duration.inMinutes < 60) {
-        return "${duration.inMinutes} minutes ago";
-      } else if (duration.inHours < 24) {
-        return "${duration.inHours} hours ago";
-      } else {
-        int days = duration.inDays;
-        if (days == 1) {
-          return "yesterday";
-        } else if (days <= 7) {
-          return "$days days ago";
-        } else {
-          return DateFormat("MMM d, y").format(dateTime);
-        }
-      }
-    }
-
-    // Format the difference as a human-readable string
-    String formattedDifference = formatDuration(difference);
-
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) {
-              return WebViewApp(
-                link: url,
-              );
-            },
-          ),
-        );
-      },
-      child: Container(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Container(
-                  height: 180,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(imageUrl),
-                    ),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-
-                  // child: ClipRRect(
-                  //   borderRadius: BorderRadius.circular(15),
-                  //   child: Image.network(imageUrl),
-                  // ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  right: 30,
-                  child: Text(
-                    formattedDifference.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 17,
-                      backgroundColor: Colors.black45,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                decoration: TextDecoration.underline,
-                fontSize: 20,
-              ),
-            ),
-            Text(
-              desc,
-              style: const TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-            const Divider(
-              color: Colors.grey,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

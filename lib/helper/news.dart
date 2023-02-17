@@ -16,9 +16,8 @@ class News {
       'newsapi.org',
       '/v2/top-headlines',
       {
-        // 'country': 'us',
-        'sources':'bbc-news',
-        // 'category': 'general',
+        'country': 'us',
+        'category': 'general',
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
     );
