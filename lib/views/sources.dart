@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:news_app/helper/news.dart';
 import 'package:news_app/model/article_model.dart';
 import 'package:news_app/views/blog_tile.dart';
-import 'package:news_app/views/home.dart';
 
 class NewsSorces extends StatefulWidget {
   final String source;
@@ -15,11 +17,13 @@ class NewsSorces extends StatefulWidget {
 
 class _NewsSorcesState extends State<NewsSorces> {
   List<ArticleModel> articles = <ArticleModel>[];
+  String _timeString = '';
 
   @override
   void initState() {
     super.initState();
     getNews();
+    getTime();
   }
 
   getNews() async {
@@ -31,21 +35,31 @@ class _NewsSorcesState extends State<NewsSorces> {
     });
   }
 
+  getTime() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _timeString = DateFormat('hh:mm a').format(DateTime.now());
+      });
+    });
+    _timeString = DateFormat('hh:mm a').format(DateTime.now());
+  }
+
   bool _loading = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(
-                Icons.arrow_back_ios_new,
-                color: Colors.white,
-              ),),
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+          ),
+        ),
         title: Text(
           widget.title.toUpperCase(),
           style: const TextStyle(
@@ -54,6 +68,23 @@ class _NewsSorcesState extends State<NewsSorces> {
             fontSize: 20,
           ),
         ),
+        actions: [
+          Container(
+            padding: const EdgeInsets.all(3.2),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Colors.white,
+            ),
+            child: Text(
+              _timeString,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
       ),
       body: _loading
           ? Container(
@@ -89,6 +120,7 @@ class _NewsSorcesState extends State<NewsSorces> {
                         itemCount: articles.length,
                         itemBuilder: (context, index) {
                           return Blogtile(
+                            auther: articles[index].auther!,
                             imageUrl: articles[index].urlToImage,
                             title: articles[index].title,
                             desc: articles[index].description,

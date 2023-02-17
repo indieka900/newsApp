@@ -9,6 +9,7 @@ final yesterday = today.subtract(const Duration(days: 2),);
 final yesterdayDate = yesterday.toLocal().toString().split(' ')[0];
 
 
+
 class News {
   List<ArticleModel> news = [];
   Future<void> getNews() async {
@@ -32,7 +33,7 @@ class News {
             description: element['description'],
             url: element['url'],
             urlToImage: element['urlToImage'],
-            auther: element['author'],
+            auther: element['source']['name'],
             content: element['content'],
             publishAT: element['publishedAt'],
           );
@@ -70,7 +71,7 @@ class NewsCategory {
             description: element['description'],
             url: element['url'],
             urlToImage: element['urlToImage'],
-            auther: element['author'],
+            auther: element['source']['name'],
             content: element['content'],
             publishAT: element['publishedAt'],
           );
@@ -108,7 +109,7 @@ class NewsSource {
             description: element['description'],
             url: element['url'],
             urlToImage: element['urlToImage'],
-            auther: element['author'],
+            auther: element['source']['name'],
             content: element['content'],
             publishAT: element['publishedAt'],
           );
@@ -145,7 +146,7 @@ class SearchNews {
             description: element['description'],
             url: element['url'],
             urlToImage: element['urlToImage'],
-            auther: element['author'],
+            auther: element['source']['name'],
             content: element['content'],
             publishAT: element['publishedAt'],
           );

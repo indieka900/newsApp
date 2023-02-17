@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:news_app/helper/news.dart';
 import 'package:news_app/model/article_model.dart';
 import 'package:news_app/views/blog_tile.dart';
@@ -14,11 +17,13 @@ class Searched extends StatefulWidget {
 
 class _SearchedState extends State<Searched> {
   List<ArticleModel> articles = <ArticleModel>[];
+  String _timeString = '';
 
   @override
   void initState() {
     super.initState();
     getNews();
+    getTime();
   }
 
   getNews() async {
@@ -28,6 +33,15 @@ class _SearchedState extends State<Searched> {
     setState(() {
       _loading = false;
     });
+  }
+
+  getTime() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _timeString = DateFormat('hh:mm a').format(DateTime.now());
+      });
+    });
+    _timeString = DateFormat('hh:mm a').format(DateTime.now());
   }
 
   bool _loading = true;
@@ -54,6 +68,23 @@ class _SearchedState extends State<Searched> {
             fontSize: 20,
           ),
         ),
+        actions: [
+          Container(
+            padding: const EdgeInsets.all(3.2),
+            margin: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Colors.white,
+            ),
+            child: Text(
+              _timeString,
+              style: const TextStyle(
+                fontSize: 15,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
       ),
       body: _loading
           ? Container(
@@ -89,6 +120,7 @@ class _SearchedState extends State<Searched> {
                         itemCount: articles.length,
                         itemBuilder: (context, index) {
                           return Blogtile(
+                            auther: articles[index].auther!,
                             imageUrl: articles[index].urlToImage,
                             title: articles[index].title,
                             desc: articles[index].description,

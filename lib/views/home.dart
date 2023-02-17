@@ -1,8 +1,12 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, prefer_final_fields
+
+import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:news_app/helper/data.dart';
 import 'package:news_app/helper/news.dart';
+import 'package:news_app/helper/popup.dart';
 import 'package:news_app/model/article_model.dart';
 import 'package:news_app/model/category_model.dart';
 import 'package:news_app/views/blog_tile.dart';
@@ -25,12 +29,23 @@ class _HomeState extends State<Home> {
   bool _loading = true;
 
   bool _isSearching = false;
+  String _timeString = '';
 
   @override
   void initState() {
     super.initState();
     categories = getCategories();
     getNews();
+    getTime();
+  }
+
+  getTime() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _timeString = DateFormat('hh:mm a').format(DateTime.now());
+      });
+    });
+    _timeString = DateFormat('hh:mm a').format(DateTime.now());
   }
 
   getNews() async {
@@ -51,8 +66,8 @@ class _HomeState extends State<Home> {
         title: !_isSearching
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-                  Text(
+                children: <Widget>[
+                  const Text(
                     'Trending',
                     style: TextStyle(
                       color: Colors.white,
@@ -60,11 +75,28 @@ class _HomeState extends State<Home> {
                       fontSize: 25,
                     ),
                   ),
-                  Text(
+                  const Text(
                     'News',
                     style: TextStyle(
                       color: Colors.green,
                       fontSize: 25,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(3.2),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: Colors.white,
+                    ),
+                    child: Text(
+                      _timeString,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ],
@@ -104,48 +136,7 @@ class _HomeState extends State<Home> {
             ),
           ),
           PopupMenuButton(
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'abc-news',
-                child: Text('ABC News'),
-              ),
-              const PopupMenuItem(
-                value: 'associated-press',
-                child: Text('Associated-press News'),
-              ),
-              const PopupMenuItem(
-                value: 'australian-financial-review',
-                child: Text('Australian News'),
-              ),
-              const PopupMenuItem(
-                value: 'bbc-news',
-                child: Text('BBC News'),
-              ),
-              const PopupMenuItem(
-                value: 'cnn',
-                child: Text('CNN News'),
-              ),
-              const PopupMenuItem(
-                value: 'cbc-news',
-                child: Text('CBC News'),
-              ),
-              const PopupMenuItem(
-                value: 'entertainment-weekly',
-                child: Text('Entertainment-weekly'),
-              ),
-              const PopupMenuItem(
-                value: 'google-news',
-                child: Text('GOOGLE News'),
-              ),
-              const PopupMenuItem(
-                value: 'fox-sports',
-                child: Text('Fox sports News'),
-              ),
-              const PopupMenuItem(
-                value: 'hacker-news',
-                child: Text('HACKER News'),
-              ),
-            ],
+            itemBuilder: (context) => popupMenuItems,
             onSelected: (String newvalue) {
               setState(() {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -214,6 +205,7 @@ class _HomeState extends State<Home> {
                               desc: articles[index].description,
                               url: articles[index].url,
                               now: articles[index].publishAT,
+                              auther: articles[index].auther!,
                             );
                           },
                         ),

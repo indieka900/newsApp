@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:news_app/views/article.dart';
 
+final nowday = DateTime.now();
+final format = DateFormat('h:mm a');
+// format the time using the format object
+String formattedTime = format.format(nowday);
+
 class Blogtile extends StatelessWidget {
-  final String imageUrl, title, desc, url, now;
+  final String imageUrl, title, desc, url, now, auther;
 
   const Blogtile({
     super.key,
@@ -12,6 +17,7 @@ class Blogtile extends StatelessWidget {
     required this.desc,
     required this.url,
     required this.now,
+    required this.auther,
   });
 
   @override
@@ -55,67 +61,105 @@ class Blogtile extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                Container(
-                  height: 180,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage(imageUrl),
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const CircleAvatar(
+                backgroundImage: NetworkImage(
+                    'https://media.istockphoto.com/id/1390033645/photo/world-news-background-which-can-be-used-for-broadcast-news.jpg?b=1&s=170667a&w=0&k=20&c=glqFWZtWU4Zqyxd8CRu5_Or81zqwe7cyhturXaIFEOA='),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SelectableText(
+                    auther,
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 183, 243, 94),
+                      fontSize: 21,
+                      decoration: TextDecoration.underline,
+                      decorationThickness: 1.2,
+                      fontWeight: FontWeight.w700,
+                      //decorationStyle: TextDecorationStyle.dashed,
+                      decorationColor: Colors.white,
                     ),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
                   ),
-
-                  // child: ClipRRect(
-                  //   borderRadius: BorderRadius.circular(15),
-                  //   child: Image.network(imageUrl),
-                  // ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  right: 30,
-                  child: Text(
+                  Text(
                     formattedDifference.toString(),
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 17,
-                      backgroundColor: Colors.black45,
+                      fontStyle: FontStyle.italic,
+                      fontSize: 12,
                     ),
                   ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Stack(
+            children: [
+              Container(
+                height: 195,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(imageUrl),
+                  ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                decoration: TextDecoration.underline,
-                fontSize: 20,
+
+                // child: ClipRRect(
+                //   borderRadius: BorderRadius.circular(15),
+                //   child: Image.network(imageUrl),
+                // ),
               ),
+              // Positioned(
+              //   bottom: 10,
+              //   right: 30,
+              //   child: Text(
+              //     formattedDifference.toString(),
+              //     style: const TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 17,
+              //       backgroundColor: Colors.black45,
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SelectableText(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+              decoration: TextDecoration.underline,
+              fontSize: 20,
             ),
-            Text(
-              desc,
-              style: const TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-            const Divider(
+          ),
+          SelectableText(
+            desc,
+            style: const TextStyle(
               color: Colors.grey,
             ),
-            const SizedBox(
-              height: 20,
-            ),
-          ],
-        ),
+          ),
+          const Divider(
+            color: Colors.grey,
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
       ),
     );
   }

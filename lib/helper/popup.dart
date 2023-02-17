@@ -1,44 +1,25 @@
 import 'package:flutter/material.dart';
 
-List <PopupMenuEntry> pop = [
-  const PopupMenuItem(
-    value: 'abc-news',
-    child: Text('ABC News'),
-  ),
-  const PopupMenuItem(
-    value: 'associated-press',
-    child: Text('Associated-press News'),
-  ),
-  const PopupMenuItem(
-    value: 'australian-financial-review',
-    child: Text('Australian News'),
-  ),
-  const PopupMenuItem(
-    value: 'bbc-news',
-    child: Text('BBC News'),
-  ),
-  const PopupMenuItem(
-    value: 'cnn',
-    child: Text('CNN News'),
-  ),
-  const PopupMenuItem(
-    value: 'cbc-news',
-    child: Text('CBC News'),
-  ),
-  const PopupMenuItem(
-    value: 'entertainment-weekly',
-    child: Text('Entertainment-weekly'),
-  ),
-  const PopupMenuItem(
-    value: 'google-news',
-    child: Text('GOOGLE News'),
-  ),
-  const PopupMenuItem(
-    value: 'fox-sports',
-    child: Text('Fox sports News'),
-  ),
-  const PopupMenuItem(
-    value: 'hacker-news',
-    child: Text('HACKER News'),
-  ),
-];
+final Map<String, String> newsSources = {
+  'abc-news': 'ABC News',
+  'associated-press': 'Associated-press News',
+  'australian-financial-review': 'Australian News',
+  'bbc-news': 'BBC News',
+  'cnn': 'CNN News',
+  'cbc-news': 'CBC News',
+  'entertainment-weekly': 'Entertainment-weekly',
+  'google-news': 'GOOGLE News',
+  'fox-sports': 'Fox sports News',
+  'hacker-news': 'HACKER News',
+};
+
+final List<MapEntry<String, String>> popupItems = newsSources.entries.toList();
+
+
+final List<PopupMenuEntry<String>> popupMenuItems = popupItems
+    .map((entry) => PopupMenuItem<String>(
+          value: entry.key,
+          child: Text(entry.value),
+        ))
+    .toList();
+
