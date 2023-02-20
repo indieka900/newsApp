@@ -109,29 +109,23 @@ class _NewsSorcesState extends State<NewsSorces> {
                 articles.clear;
                 return getNews();
               },
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        itemCount: articles.length,
-                        itemBuilder: (context, index) {
-                          return Blogtile(
-                            auther: articles[index].auther!,
-                            imageUrl: articles[index].urlToImage,
-                            title: articles[index].title,
-                            desc: articles[index].description,
-                            url: articles[index].url,
-                            now: articles[index].publishAT,
-                          );
-                        },
-                      )
-                    ],
-                  ),
-                ),
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const ClampingScrollPhysics(),
+                itemCount: articles.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: const EdgeInsets.all(15),
+                    child: Blogtile(
+                      auther: articles[index].auther!,
+                      imageUrl: articles[index].urlToImage,
+                      title: articles[index].title,
+                      desc: articles[index].description,
+                      url: articles[index].url,
+                      now: articles[index].publishAT,
+                    ),
+                  );
+                },
               ),
             ),
     );

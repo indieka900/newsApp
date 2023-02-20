@@ -5,7 +5,7 @@ final Map<String, String> newsSources = {
   'associated-press': 'Associated-press News',
   'australian-financial-review': 'Australian News',
   'bbc-news': 'BBC News',
-  'cnn': 'CNN News',
+  'techcrunch': 'TechCrunch News',
   'cbc-news': 'CBC News',
   'entertainment-weekly': 'Entertainment-weekly',
   'google-news': 'GOOGLE News',
@@ -15,11 +15,11 @@ final Map<String, String> newsSources = {
 
 final List<MapEntry<String, String>> popupItems = newsSources.entries.toList();
 
-
 final List<PopupMenuEntry<String>> popupMenuItems = popupItems
-    .map((entry) => PopupMenuItem<String>(
-          value: entry.key,
-          child: Text(entry.value),
-        ))
+    .map(
+      (entry) => PopupMenuItem<String>(
+        value: entry.key,
+        child: Text(entry.value),
+      ),
+    )
     .toList();
-

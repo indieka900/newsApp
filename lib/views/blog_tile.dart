@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:news_app/views/article.dart';
@@ -103,37 +104,22 @@ class Blogtile extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          Stack(
-            children: [
-              Container(
-                height: 195,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(imageUrl),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.contain,
+                placeholder: (context, url) => const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                    semanticsLabel: 'Loading\nPlease wait',
                   ),
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
                 ),
-
-                // child: ClipRRect(
-                //   borderRadius: BorderRadius.circular(15),
-                //   child: Image.network(imageUrl),
-                // ),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
-              // Positioned(
-              //   bottom: 10,
-              //   right: 30,
-              //   child: Text(
-              //     formattedDifference.toString(),
-              //     style: const TextStyle(
-              //       color: Colors.white,
-              //       fontSize: 17,
-              //       backgroundColor: Colors.black45,
-              //     ),
-              //   ),
-              // ),
-            ],
+            ),
           ),
           const SizedBox(
             height: 10,

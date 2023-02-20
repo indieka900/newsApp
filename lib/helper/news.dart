@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 
 final today = DateTime.now();
-final yesterday = today.subtract(const Duration(days: 2),);
+final yesterday = today.subtract(const Duration(days: 3),);
 final yesterdayDate = yesterday.toLocal().toString().split(' ')[0];
 
 
@@ -17,8 +17,10 @@ class News {
       'newsapi.org',
       '/v2/top-headlines',
       {
-        'country': 'us',
-        'category': 'general',
+        //'country': 'us',
+        //'category': 'general',
+        "language": "en",
+        'sortBy':'publishedAt',
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
     );
@@ -56,7 +58,7 @@ class NewsCategory {
       {
         'q': category,
         'from': yesterdayDate,
-        // 'sortBy': 'popularity',
+         'sortBy':'publishedAt',
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
     );
@@ -94,7 +96,9 @@ class NewsSource {
         // 'country': 'us',
         'sources':source,
         "language": "en",
+        'from': yesterdayDate,
         // 'category': 'general',
+        'sortBy':'publishedAt',
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
     );
@@ -131,7 +135,8 @@ class SearchNews {
       {
         'q': sNews,
         'from': yesterdayDate,
-        'sortBy': 'popularity',
+        'sortBy':'publishedAt',
+        "language": "en",
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
     );

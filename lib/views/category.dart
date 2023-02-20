@@ -72,7 +72,7 @@ class _CategoryViewsState extends State<CategoryViews> {
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
-                  fontSize: 25,
+                  fontSize: 20,
                 ),
               ),
               const Text(
@@ -120,28 +120,22 @@ class _CategoryViewsState extends State<CategoryViews> {
                   ),
                 ),
               )
-            : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        itemCount: articles.length,
-                        itemBuilder: (context, index) {
-                          return Blogtile(
-                            auther: articles[index].auther!,
-                            now: articles[index].publishAT,
-                            imageUrl: articles[index].urlToImage,
-                            title: articles[index].title,
-                            desc: articles[index].description,
-                            url: articles[index].url,
-                          );
-                        },
-                      ),
-                    )
-                  ],
+            : Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: articles.length,
+                  itemBuilder: (context, index) {
+                    return Blogtile(
+                      auther: articles[index].auther!,
+                      now: articles[index].publishAT,
+                      imageUrl: articles[index].urlToImage,
+                      title: articles[index].title,
+                      desc: articles[index].description,
+                      url: articles[index].url,
+                    );
+                  },
                 ),
               ),
       ),

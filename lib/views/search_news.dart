@@ -109,28 +109,22 @@ class _SearchedState extends State<Searched> {
                 articles.clear;
                 return getNews();
               },
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        itemCount: articles.length,
-                        itemBuilder: (context, index) {
-                          return Blogtile(
-                            auther: articles[index].auther!,
-                            imageUrl: articles[index].urlToImage,
-                            title: articles[index].title,
-                            desc: articles[index].description,
-                            url: articles[index].url,
-                            now: articles[index].publishAT,
-                          );
-                        },
-                      )
-                    ],
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: articles.length,
+                  itemBuilder: (context, index) {
+                    return Blogtile(
+                      auther: articles[index].auther!,
+                      imageUrl: articles[index].urlToImage,
+                      title: articles[index].title,
+                      desc: articles[index].description,
+                      url: articles[index].url,
+                      now: articles[index].publishAT,
+                    );
+                  },
                 ),
               ),
             ),
