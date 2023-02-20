@@ -17,8 +17,6 @@ class News {
       'newsapi.org',
       '/v2/top-headlines',
       {
-        //'country': 'us',
-        //'category': 'general',
         "language": "en",
         'sortBy':'publishedAt',
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
@@ -58,7 +56,8 @@ class NewsCategory {
       {
         'q': category,
         'from': yesterdayDate,
-         'sortBy':'publishedAt',
+        'sortBy':'publishedAt',
+        "language": "en",
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
     );
@@ -93,11 +92,9 @@ class NewsSource {
       'newsapi.org',
       '/v2/everything',
       {
-        // 'country': 'us',
         'sources':source,
         "language": "en",
         'from': yesterdayDate,
-        // 'category': 'general',
         'sortBy':'publishedAt',
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },

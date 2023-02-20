@@ -108,7 +108,10 @@ class _HomeState extends State<Home> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Searched(source: value),
+                      builder: (context) => Searched(
+                        source: value,
+                        search: _textController.text,
+                      ),
                     ),
                   );
                   _textController.clear();
@@ -176,12 +179,12 @@ class _HomeState extends State<Home> {
               },
               child: SingleChildScrollView(
                 child: Container(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(15),
                   child: Column(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(12),
-                        height: 150,
+                        padding: const EdgeInsets.all(8),
+                        height: 100,
                         child: ListView.builder(
                           itemCount: categories.length,
                           scrollDirection: Axis.horizontal,
@@ -217,5 +220,4 @@ class _HomeState extends State<Home> {
             ),
     );
   }
-
 }

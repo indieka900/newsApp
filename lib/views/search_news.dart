@@ -5,11 +5,10 @@ import 'package:intl/intl.dart';
 import 'package:news_app/helper/news.dart';
 import 'package:news_app/model/article_model.dart';
 import 'package:news_app/views/blog_tile.dart';
-import 'package:news_app/views/home.dart';
 
 class Searched extends StatefulWidget {
-  final String source;
-  const Searched({super.key, required this.source});
+  final String source,search;
+  const Searched({super.key, required this.source, required this.search});
 
   @override
   State<Searched> createState() => _SearchedState();
@@ -110,7 +109,7 @@ class _SearchedState extends State<Searched> {
                 return getNews();
               },
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(15.0),
                 child: ListView.builder(
                   shrinkWrap: true,
                   physics: const ClampingScrollPhysics(),

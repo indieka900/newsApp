@@ -5,6 +5,8 @@ final Map<String, String> newsSources = {
   'associated-press': 'Associated-press News',
   'australian-financial-review': 'Australian News',
   'bbc-news': 'BBC News',
+  'mtv-news': 'MTV News',
+  'bbc-sport': 'BBC Sports News',
   'techcrunch': 'TechCrunch News',
   'cbc-news': 'CBC News',
   'entertainment-weekly': 'Entertainment-weekly',

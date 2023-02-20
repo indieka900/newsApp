@@ -33,15 +33,15 @@ class Subtitle extends StatelessWidget {
               borderRadius: BorderRadius.circular(10),
               child: CachedNetworkImage(
                 imageUrl: imageUrl,
-                height: 60,
-                width: 120,
+                height: 80,
+                width: 150,
                 fit: BoxFit.cover,
               ),
             ),
             Container(
               alignment: Alignment.center,
-              height: 60,
-              width: 120,
+              height: 80,
+              width: 150,
               decoration: BoxDecoration(
                 color: Colors.black26,
                 borderRadius: BorderRadius.circular(10),
