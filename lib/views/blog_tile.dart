@@ -111,10 +111,13 @@ class Blogtile extends StatelessWidget {
               child: CachedNetworkImage(
                 imageUrl: imageUrl,
                 fit: BoxFit.contain,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                    semanticsLabel: 'Loading\nPlease wait',
+                placeholder: (context, url) => const Padding(
+                  padding:  EdgeInsets.all(10.0),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      semanticsLabel: 'Loading\nPlease wait',
+                    ),
                   ),
                 ),
                 errorWidget: (context, url, error) => const Icon(Icons.error),

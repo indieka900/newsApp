@@ -18,6 +18,7 @@ class _CategoryViewsState extends State<CategoryViews> {
   List<ArticleModel> articles = <ArticleModel>[];
   bool _loading = true;
   String _timeString = '';
+  String _errorMessage = '';
 
   @override
   void initState() {
@@ -37,11 +38,18 @@ class _CategoryViewsState extends State<CategoryViews> {
 
   getCategoryNews() async {
     NewsCategory newsClass = NewsCategory();
-    await newsClass.getNews(widget.category);
-    articles = newsClass.news;
-    setState(() {
-      _loading = false;
-    });
+    try {
+      await newsClass.getNews(widget.category);
+      articles = newsClass.news;
+      setState(() {
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = "Failed to load news: \n${e.toString()}";
+        _loading = false;
+      });
+    }
   }
 
   @override
@@ -51,7 +59,9 @@ class _CategoryViewsState extends State<CategoryViews> {
         await getCategoryNews();
       },
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: _errorMessage.isNotEmpty
+            ? const Color.fromARGB(255, 23, 59, 24)
+            : Colors.black,
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.transparent,
@@ -120,24 +130,41 @@ class _CategoryViewsState extends State<CategoryViews> {
                   ),
                 ),
               )
-            : Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: articles.length,
-                  itemBuilder: (context, index) {
-                    return Blogtile(
-                      auther: articles[index].auther!,
-                      now: articles[index].publishAT,
-                      imageUrl: articles[index].urlToImage,
-                      title: articles[index].title,
-                      desc: articles[index].description,
-                      url: articles[index].url,
-                    );
-                  },
-                ),
-              ),
+            : _errorMessage.isNotEmpty
+                ? Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Text(
+                        _errorMessage,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: articles.length,
+                      itemBuilder: (context, index) {
+                        return Blogtile(
+                          auther: articles[index].auther!,
+                          now: articles[index].publishAT,
+                          imageUrl: articles[index].urlToImage,
+                          title: articles[index].title,
+                          desc: articles[index].description,
+                          url: articles[index].url,
+                        );
+                      },
+                    ),
+                  ),
       ),
     );
   }

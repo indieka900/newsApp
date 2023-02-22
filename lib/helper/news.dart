@@ -3,12 +3,11 @@ import 'dart:convert';
 import '../model/article_model.dart';
 import 'package:http/http.dart' as http;
 
-
 final today = DateTime.now();
-final yesterday = today.subtract(const Duration(days: 3),);
+final yesterday = today.subtract(
+  const Duration(days: 3),
+);
 final yesterdayDate = yesterday.toLocal().toString().split(' ')[0];
-
-
 
 class News {
   List<ArticleModel> news = [];
@@ -18,13 +17,18 @@ class News {
       '/v2/top-headlines',
       {
         "language": "en",
-        'sortBy':'publishedAt',
+        'sortBy': 'publishedAt',
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
     );
 
     var response = await http.get(uri);
     var json = jsonDecode(response.body);
+
+    if (json['status'] == 'error' || json['code'] == 'apiKeyMissing') {
+      throw Exception(json['message']);
+    }
+
     if (json['status'] == 'ok') {
       json['articles'].forEach((element) {
         if (element['urlToImage'] != null && element['description'] != null) {
@@ -44,11 +48,8 @@ class News {
   }
 }
 
-
 class NewsCategory {
   List<ArticleModel> news = [];
-  
-
   Future<void> getNews(String category) async {
     var uri = Uri.https(
       'newsapi.org',
@@ -56,7 +57,7 @@ class NewsCategory {
       {
         'q': category,
         'from': yesterdayDate,
-        'sortBy':'publishedAt',
+        'sortBy': 'publishedAt',
         "language": "en",
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
@@ -64,6 +65,11 @@ class NewsCategory {
 
     var response = await http.get(uri);
     var json = jsonDecode(response.body);
+
+    if (json['status'] == 'error' || json['code'] == 'apiKeyMissing') {
+      throw Exception(json['message']);
+    }
+
     if (json['status'] == 'ok') {
       json['articles'].forEach((element) {
         if (element['urlToImage'] != null && element['description'] != null) {
@@ -85,23 +91,24 @@ class NewsCategory {
 
 class NewsSource {
   List<ArticleModel> news = [];
-  
-
   Future<void> getNews(String source) async {
     var uri = Uri.https(
       'newsapi.org',
       '/v2/everything',
       {
-        'sources':source,
+        'sources': source,
         "language": "en",
         'from': yesterdayDate,
-        'sortBy':'publishedAt',
+        'sortBy': 'publishedAt',
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
     );
 
     var response = await http.get(uri);
     var json = jsonDecode(response.body);
+    if (json['status'] == 'error' || json['code'] == 'apiKeyMissing') {
+      throw Exception(json['message']);
+    }
     if (json['status'] == 'ok') {
       json['articles'].forEach((element) {
         if (element['urlToImage'] != null && element['description'] != null) {
@@ -123,8 +130,6 @@ class NewsSource {
 
 class SearchNews {
   List<ArticleModel> news = [];
-  
-
   Future<void> getNews(String sNews) async {
     var uri = Uri.https(
       'newsapi.org',
@@ -132,7 +137,7 @@ class SearchNews {
       {
         'q': sNews,
         'from': yesterdayDate,
-        'sortBy':'publishedAt',
+        'sortBy': 'publishedAt',
         "language": "en",
         'apiKey': '2e97f341c1424ed89bef5209c1bf4544',
       },
@@ -140,6 +145,9 @@ class SearchNews {
 
     var response = await http.get(uri);
     var json = jsonDecode(response.body);
+    if (json['status'] == 'error' || json['code'] == 'apiKeyMissing') {
+      throw Exception(json['message']);
+    }
     if (json['status'] == 'ok') {
       json['articles'].forEach((element) {
         if (element['urlToImage'] != null && element['description'] != null) {
@@ -158,4 +166,3 @@ class SearchNews {
     }
   }
 }
-

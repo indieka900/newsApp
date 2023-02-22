@@ -7,7 +7,7 @@ import 'package:news_app/model/article_model.dart';
 import 'package:news_app/views/blog_tile.dart';
 
 class Searched extends StatefulWidget {
-  final String source,search;
+  final String source, search;
   const Searched({super.key, required this.source, required this.search});
 
   @override
@@ -17,6 +17,7 @@ class Searched extends StatefulWidget {
 class _SearchedState extends State<Searched> {
   List<ArticleModel> articles = <ArticleModel>[];
   String _timeString = '';
+  String _errorMessage = '';
 
   @override
   void initState() {
@@ -27,11 +28,18 @@ class _SearchedState extends State<Searched> {
 
   getNews() async {
     SearchNews newsClass = SearchNews();
-    await newsClass.getNews(widget.source);
-    articles = newsClass.news;
-    setState(() {
-      _loading = false;
-    });
+    try {
+      await newsClass.getNews(widget.source);
+      articles = newsClass.news;
+      setState(() {
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = "Failed to load news: \n${e.toString()}";
+        _loading = false;
+      });
+    }
   }
 
   getTime() {
@@ -47,6 +55,9 @@ class _SearchedState extends State<Searched> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: _errorMessage.isNotEmpty
+          ? const Color.fromARGB(255, 23, 59, 24)
+          : Colors.black,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
@@ -105,27 +116,44 @@ class _SearchedState extends State<Searched> {
             )
           : RefreshIndicator(
               onRefresh: () {
-                articles.clear;
+                articles.clear();
                 return getNews();
               },
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: articles.length,
-                  itemBuilder: (context, index) {
-                    return Blogtile(
-                      auther: articles[index].auther!,
-                      imageUrl: articles[index].urlToImage,
-                      title: articles[index].title,
-                      desc: articles[index].description,
-                      url: articles[index].url,
-                      now: articles[index].publishAT,
-                    );
-                  },
-                ),
-              ),
+              child: _errorMessage.isNotEmpty
+                  ? Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: Text(
+                          _errorMessage,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: articles.length,
+                        itemBuilder: (context, index) {
+                          return Blogtile(
+                            auther: articles[index].auther!,
+                            imageUrl: articles[index].urlToImage,
+                            title: articles[index].title,
+                            desc: articles[index].description,
+                            url: articles[index].url,
+                            now: articles[index].publishAT,
+                          );
+                        },
+                      ),
+                    ),
             ),
     );
   }

@@ -18,6 +18,7 @@ class NewsSorces extends StatefulWidget {
 class _NewsSorcesState extends State<NewsSorces> {
   List<ArticleModel> articles = <ArticleModel>[];
   String _timeString = '';
+  String _errorMessage = '';
 
   @override
   void initState() {
@@ -28,11 +29,18 @@ class _NewsSorcesState extends State<NewsSorces> {
 
   getNews() async {
     NewsSource newsClass = NewsSource();
-    await newsClass.getNews(widget.source);
-    articles = newsClass.news;
-    setState(() {
-      _loading = false;
-    });
+    try {
+      await newsClass.getNews(widget.source);
+      articles = newsClass.news;
+      setState(() {
+        _loading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = "Failed to load news: \n${e.toString()}";
+        _loading = false;
+      });
+    }
   }
 
   getTime() {
@@ -48,6 +56,9 @@ class _NewsSorcesState extends State<NewsSorces> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: _errorMessage.isNotEmpty
+          ? const Color.fromARGB(255, 23, 59, 24)
+          : Colors.black,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
@@ -109,24 +120,41 @@ class _NewsSorcesState extends State<NewsSorces> {
                 articles.clear;
                 return getNews();
               },
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const ClampingScrollPhysics(),
-                itemCount: articles.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    padding: const EdgeInsets.all(15),
-                    child: Blogtile(
-                      auther: articles[index].auther!,
-                      imageUrl: articles[index].urlToImage,
-                      title: articles[index].title,
-                      desc: articles[index].description,
-                      url: articles[index].url,
-                      now: articles[index].publishAT,
+              child: _errorMessage.isNotEmpty
+                  ? Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: Text(
+                          _errorMessage,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: articles.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: const EdgeInsets.all(15),
+                          child: Blogtile(
+                            auther: articles[index].auther!,
+                            imageUrl: articles[index].urlToImage,
+                            title: articles[index].title,
+                            desc: articles[index].description,
+                            url: articles[index].url,
+                            now: articles[index].publishAT,
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
             ),
     );
   }
