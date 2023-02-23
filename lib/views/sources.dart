@@ -19,6 +19,7 @@ class _NewsSorcesState extends State<NewsSorces> {
   List<ArticleModel> articles = <ArticleModel>[];
   String _timeString = '';
   String _errorMessage = '';
+  int _page = 1;
 
   @override
   void initState() {
@@ -30,7 +31,7 @@ class _NewsSorcesState extends State<NewsSorces> {
   getNews() async {
     NewsSource newsClass = NewsSource();
     try {
-      await newsClass.getNews(widget.source);
+      await newsClass.getNews(widget.source,_page);
       articles = newsClass.news;
       setState(() {
         _loading = false;
@@ -117,7 +118,7 @@ class _NewsSorcesState extends State<NewsSorces> {
             )
           : RefreshIndicator(
               onRefresh: () {
-                articles.clear;
+                _page <= 5 ? _page++ : _page = 5;
                 return getNews();
               },
               child: _errorMessage.isNotEmpty

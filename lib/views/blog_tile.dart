@@ -81,7 +81,7 @@ class Blogtile extends StatelessWidget {
                     auther,
                     style: const TextStyle(
                       color: Color.fromARGB(255, 183, 243, 94),
-                      fontSize: 21,
+                      fontSize: 18,
                       decoration: TextDecoration.underline,
                       decorationThickness: 1.2,
                       fontWeight: FontWeight.w700,
@@ -112,7 +112,7 @@ class Blogtile extends StatelessWidget {
                 imageUrl: imageUrl,
                 fit: BoxFit.contain,
                 placeholder: (context, url) => const Padding(
-                  padding:  EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(10.0),
                   child: Center(
                     child: CircularProgressIndicator(
                       color: Colors.white,

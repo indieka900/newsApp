@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:news_app/helper/data.dart';
 import 'package:news_app/helper/news.dart';
 import 'package:news_app/model/article_model.dart';
 import 'package:news_app/views/blog_tile.dart';
@@ -19,6 +20,7 @@ class _CategoryViewsState extends State<CategoryViews> {
   bool _loading = true;
   String _timeString = '';
   String _errorMessage = '';
+  int _page = 1;
 
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _CategoryViewsState extends State<CategoryViews> {
   getCategoryNews() async {
     NewsCategory newsClass = NewsCategory();
     try {
-      await newsClass.getNews(widget.category);
+      await newsClass.getNews(widget.category,_page);
       articles = newsClass.news;
       setState(() {
         _loading = false;
@@ -130,41 +132,47 @@ class _CategoryViewsState extends State<CategoryViews> {
                   ),
                 ),
               )
-            : _errorMessage.isNotEmpty
-                ? Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(20),
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(50)),
-                      child: Text(
-                        _errorMessage,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red,
+            : RefreshIndicator(
+              onRefresh: () {
+                _page <= 5 ? _page++ : _page = 5;
+                return getCategoryNews();
+              },
+              child: _errorMessage.isNotEmpty
+                  ? Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: Text(
+                          _errorMessage,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
                         ),
                       ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: articles.length,
+                        itemBuilder: (context, index) {
+                          return Blogtile(
+                            auther: articles[index].auther!,
+                            now: articles[index].publishAT,
+                            imageUrl: articles[index].urlToImage,
+                            title: articles[index].title,
+                            desc: articles[index].description,
+                            url: articles[index].url,
+                          );
+                        },
+                      ),
                     ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
-                      itemCount: articles.length,
-                      itemBuilder: (context, index) {
-                        return Blogtile(
-                          auther: articles[index].auther!,
-                          now: articles[index].publishAT,
-                          imageUrl: articles[index].urlToImage,
-                          title: articles[index].title,
-                          desc: articles[index].description,
-                          url: articles[index].url,
-                        );
-                      },
-                    ),
-                  ),
+            ),
       ),
     );
   }

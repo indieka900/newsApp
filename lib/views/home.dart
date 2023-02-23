@@ -24,7 +24,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<CategoryModel> categories = <CategoryModel>[];
   List<ArticleModel> articles = <ArticleModel>[];
+  List<ArticleModel> finalarticles = <ArticleModel>[];
   final _textController = TextEditingController();
+  int _page = 1;
 
   bool _loading = true;
 
@@ -53,9 +55,10 @@ class _HomeState extends State<Home> {
   getNews() async {
     News newsClass = News();
     try {
-      await newsClass.getNews();
+      await newsClass.getNews(_page);
       articles = newsClass.news;
       setState(() {
+        finalarticles.insertAll(0, articles);
         _loading = false;
       });
     } catch (e) {
@@ -207,7 +210,7 @@ class _HomeState extends State<Home> {
             )
           : RefreshIndicator(
               onRefresh: () {
-                articles.clear;
+                _page <= 5 ? _page++ : _page = 5;
                 return getNews();
               },
               child: _errorMessage.isNotEmpty
@@ -247,20 +250,33 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             Container(
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: const ClampingScrollPhysics(),
-                                itemCount: articles.length,
-                                itemBuilder: (context, index) {
-                                  return Blogtile(
-                                    imageUrl: articles[index].urlToImage,
-                                    title: articles[index].title,
-                                    desc: articles[index].description,
-                                    url: articles[index].url,
-                                    now: articles[index].publishAT,
-                                    auther: articles[index].auther!,
-                                  );
+                              child: NotificationListener(
+                                onNotification:
+                                    (ScrollNotification scrollInfo) {
+                                  if (scrollInfo.metrics.maxScrollExtent ==
+                                      scrollInfo.metrics.pixels) {
+                                    setState(() {
+                                      _page <= 5 ? _page++ : _page = 5;
+                                      getNews();
+                                    });
+                                  }
+                                  return true;
                                 },
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const ClampingScrollPhysics(),
+                                  itemCount: finalarticles.length,
+                                  itemBuilder: (context, index) {
+                                    return Blogtile(
+                                      imageUrl: finalarticles[index].urlToImage,
+                                      title: finalarticles[index].title,
+                                      desc: finalarticles[index].description,
+                                      url: finalarticles[index].url,
+                                      now: finalarticles[index].publishAT,
+                                      auther: finalarticles[index].auther!,
+                                    );
+                                  },
+                                ),
                               ),
                             )
                           ],

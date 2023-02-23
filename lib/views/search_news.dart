@@ -18,6 +18,7 @@ class _SearchedState extends State<Searched> {
   List<ArticleModel> articles = <ArticleModel>[];
   String _timeString = '';
   String _errorMessage = '';
+  int _page = 1;
 
   @override
   void initState() {
@@ -29,7 +30,7 @@ class _SearchedState extends State<Searched> {
   getNews() async {
     SearchNews newsClass = SearchNews();
     try {
-      await newsClass.getNews(widget.source);
+      await newsClass.getNews(widget.source,_page);
       articles = newsClass.news;
       setState(() {
         _loading = false;
@@ -116,7 +117,7 @@ class _SearchedState extends State<Searched> {
             )
           : RefreshIndicator(
               onRefresh: () {
-                articles.clear();
+                _page <= 5 ? _page++ : _page = 5;
                 return getNews();
               },
               child: _errorMessage.isNotEmpty
