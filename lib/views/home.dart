@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:news_app/helper/data.dart';
 import 'package:news_app/helper/news.dart';
 import 'package:news_app/helper/popup.dart';
@@ -26,9 +27,10 @@ class _HomeState extends State<Home> {
   List<ArticleModel> articles = <ArticleModel>[];
   List<ArticleModel> finalarticles = <ArticleModel>[];
   final _textController = TextEditingController();
-  int _page = 1;
+  int _page = 0;
 
   bool _loading = true;
+  bool _loading1 = false;
 
   bool _isSearching = false;
   String? _timeString;
@@ -52,19 +54,36 @@ class _HomeState extends State<Home> {
     _timeString = DateFormat('hh:mm a').format(DateTime.now());
   }
 
-  getNews() async {
+  Future<void> getNews() async {
     News newsClass = News();
     try {
       await newsClass.getNews(_page);
-      articles = newsClass.news;
+      List<ArticleModel> newArticles = newsClass.news;
       setState(() {
-        finalarticles.insertAll(0, articles);
+        if (_page == 0) {
+          articles = newArticles;
+        } else {
+          articles.addAll(newArticles);
+        }
         _loading = false;
       });
     } catch (e) {
       setState(() {
         _errorMessage = "Failed to load news: \n${e.toString()}";
         _loading = false;
+      });
+    }
+  }
+
+  loadmore() async {
+    if (_page <= 4) {
+      _page++;
+      setState(() {
+        _loading1 = true;
+      });
+      await getNews();
+      setState(() {
+        _loading1 = false;
       });
     }
   }
@@ -190,22 +209,19 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: _loading
-          ? Container(
-              color: Colors.greenAccent,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    CircularProgressIndicator(
-                      semanticsLabel: 'Loading please wait',
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text('LOADING')
-                  ],
-                ),
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+                  CircularProgressIndicator(
+                    semanticsLabel: 'Loading please wait',
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text('LOADING')
+                ],
               ),
             )
           : RefreshIndicator(
@@ -249,41 +265,47 @@ class _HomeState extends State<Home> {
                                 },
                               ),
                             ),
-                            Container(
-                              child: NotificationListener(
-                                onNotification:
-                                    (ScrollNotification scrollInfo) {
-                                  if (scrollInfo.metrics.maxScrollExtent ==
-                                      scrollInfo.metrics.pixels) {
-                                    setState(() {
-                                      _page <= 5 ? _page++ : _page = 5;
-                                      getNews();
-                                    });
-                                  }
-                                  return true;
+                            LazyLoadScrollView(
+                              onEndOfPage: () => loadmore(),
+                              isLoading: _loading,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const ClampingScrollPhysics(),
+                                itemCount: articles.length,
+                                //itemExtent: 120,
+                                itemBuilder: (context, index) {
+                                  return Blogtile(
+                                    auther: articles[index].auther!,
+                                    imageUrl: articles[index].urlToImage,
+                                    title: articles[index].title,
+                                    desc: articles[index].description,
+                                    url: articles[index].url,
+                                    now: articles[index].publishAT,
+                                  );
                                 },
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: const ClampingScrollPhysics(),
-                                  itemCount: finalarticles.length,
-                                  itemBuilder: (context, index) {
-                                    return Blogtile(
-                                      imageUrl: finalarticles[index].urlToImage,
-                                      title: finalarticles[index].title,
-                                      desc: finalarticles[index].description,
-                                      url: finalarticles[index].url,
-                                      now: finalarticles[index].publishAT,
-                                      auther: finalarticles[index].auther!,
-                                    );
-                                  },
-                                ),
                               ),
-                            )
+                            ),
+                            _loading1
+                                ? Container(
+                                    margin: const EdgeInsets.only(bottom: 50.0),
+                                    child: const LinearProgressIndicator(
+                                      color: Colors.white,
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  )
+                                : Container(
+                                    color: Colors.transparent,
+                                  )
                           ],
                         ),
                       ),
                     ),
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => loadmore(),
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.refresh),
+      ),
     );
   }
 }
