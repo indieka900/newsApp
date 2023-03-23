@@ -104,37 +104,53 @@ class Blogtile extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl,
-                fit: BoxFit.contain,
-                placeholder: (context, url) => const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Center(
-                    child: CircularProgressIndicator(
+          Stack(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    fit: BoxFit.contain,
+                    placeholder: (context, url) => const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          semanticsLabel: 'Loading\nPlease wait',
+                        ),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                ),
+              ),
+              Positioned(
+                top: 100,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  decoration: const BoxDecoration(
+                    color: Colors.black54,
+                  ),
+                  child: SelectableText(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
-                      semanticsLabel: 'Loading\nPlease wait',
+                      fontSize: 20,
                     ),
                   ),
                 ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
-            ),
+            ],
           ),
           const SizedBox(
             height: 10,
-          ),
-          SelectableText(
-            title,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              decoration: TextDecoration.underline,
-              fontSize: 20,
-            ),
           ),
           SelectableText(
             desc,

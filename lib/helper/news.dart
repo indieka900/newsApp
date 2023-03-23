@@ -17,7 +17,7 @@ class News {
       '/v2/top-headlines',
       {
         "language": "en",
-        'from': yesterdayDate,
+        //'from': yesterdayDate,
         'sortBy': 'popularity',
         'page': page.toString(),
         'apiKey': 'b0c9a7feca8743bbaf4fe054f22359d1',
@@ -57,7 +57,7 @@ class NewsCategory {
       '/v2/everything',
       {
         'q': category,
-        'from': yesterdayDate,
+        //'from': yesterdayDate,
         'sortBy': 'publishedAt',
         'page': page.toString(),
         "language": "en",

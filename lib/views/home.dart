@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
   List<ArticleModel> articles = <ArticleModel>[];
   List<ArticleModel> finalarticles = <ArticleModel>[];
   final _textController = TextEditingController();
-  int _page = 0;
+  int _page = 1;
 
   bool _loading = true;
   bool _loading1 = false;
@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
       await newsClass.getNews(_page);
       List<ArticleModel> newArticles = newsClass.news;
       setState(() {
-        if (_page == 0) {
+        if (_page == 1) {
           articles = newArticles;
         } else {
           articles.addAll(newArticles);
@@ -301,11 +301,11 @@ class _HomeState extends State<Home> {
                       ),
                     ),
             ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: !_loading ? FloatingActionButton(
         onPressed: () => loadmore(),
         backgroundColor: Colors.green,
         child: const Icon(Icons.refresh),
-      ),
+      ) : null,
     );
   }
 }
