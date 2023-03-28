@@ -3,20 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:news_app/views/home.dart';
 import 'package:splashscreen/splashscreen.dart';
 
-  
 class Splash extends StatelessWidget {
   const Splash({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SplashScreen(
-      seconds: 6,
+      seconds: 1,
       navigateAfterSeconds:  const Home(),
-      title:  const Text('NewsApp',textScaleFactor: 2,),
-      image:  Image.network('https://media.istockphoto.com/id/1390033645/photo/world-news-background-which-can-be-used-for-broadcast-news.jpg?b=1&s=170667a&w=0&k=20&c=glqFWZtWU4Zqyxd8CRu5_Or81zqwe7cyhturXaIFEOA='),
+      title: const Text(
+        'NewsApp',
+        textScaleFactor: 3,
+        style: TextStyle(
+          color: Colors.white,
+          backgroundColor: Color.fromARGB(143, 0, 0, 0),
+        ),
+      ),
+      image: Image.asset('assets/images/background.jpg'),
       loadingText: const Text("Loading"),
-      photoSize: 100.0,
-      loaderColor: Colors.blue,
+      imageBackground: const AssetImage(
+          'assets/images/background.jpg',),
+      photoSize: 150.0,
+      loaderColor: const Color.fromARGB(255, 250, 251, 252),
     );
   }
 }

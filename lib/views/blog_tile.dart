@@ -29,7 +29,6 @@ class Blogtile extends StatefulWidget {
 }
 
 class _BlogtileState extends State<Blogtile> {
- 
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateFormat("yyyy-MM-ddTHH:mm:ssZ").parse(widget.now);
@@ -77,9 +76,7 @@ class _BlogtileState extends State<Blogtile> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const CircleAvatar(
-                backgroundImage: NetworkImage(
-                  'https://media.istockphoto.com/id/1390033645/photo/world-news-background-which-can-be-used-for-broadcast-news.jpg?b=1&s=170667a&w=0&k=20&c=glqFWZtWU4Zqyxd8CRu5_Or81zqwe7cyhturXaIFEOA=',
-                ),
+                backgroundImage: AssetImage('assets/images/background.jpg'),
               ),
               const SizedBox(
                 width: 20,
