@@ -180,5 +180,6 @@ Future<String> generateImageHash() async {
   ByteData bytes = await NetworkAssetBundle(Uri.parse(imgurl)).load(imgurl);
   Uint8List pixels = bytes.buffer.asUint8List();
   var blurHash = await BlurHash.encode(pixels, 4, 3);
+  print(blurHash);
   return blurHash;
 }

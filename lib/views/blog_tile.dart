@@ -2,14 +2,16 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:news_app/views/article.dart';
-import 'package:flutter_blurhash/flutter_blurhash.dart' as f_b;
+import 'package:flutter_blurhash/flutter_blurhash.dart';
+
+import '../helper/news.dart';
 
 final nowday = DateTime.now();
 final format = DateFormat('h:mm a');
 // format the time using the format object
 String formattedTime = format.format(nowday);
 
-class Blogtile extends StatelessWidget {
+class Blogtile extends StatefulWidget {
   final String imageUrl, title, desc, url, now, auther;
 
   const Blogtile({
@@ -23,8 +25,14 @@ class Blogtile extends StatelessWidget {
   });
 
   @override
+  State<Blogtile> createState() => _BlogtileState();
+}
+
+class _BlogtileState extends State<Blogtile> {
+ 
+  @override
   Widget build(BuildContext context) {
-    DateTime dateTime = DateFormat("yyyy-MM-ddTHH:mm:ssZ").parse(now);
+    DateTime dateTime = DateFormat("yyyy-MM-ddTHH:mm:ssZ").parse(widget.now);
     // Calculate the difference between the current time and the parsed date
     Duration difference = DateTime.now().difference(dateTime);
 
@@ -57,7 +65,7 @@ class Blogtile extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) {
               return WebViewApp(
-                link: url,
+                link: widget.url,
               );
             },
           ),
@@ -80,7 +88,7 @@ class Blogtile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SelectableText(
-                    auther,
+                    widget.auther,
                     style: const TextStyle(
                       color: Color.fromARGB(255, 183, 243, 94),
                       fontSize: 18,
@@ -113,7 +121,7 @@ class Blogtile extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(15),
                   child: CachedNetworkImage(
-                    imageUrl: imageUrl,
+                    imageUrl: widget.imageUrl,
                     fit: BoxFit.contain,
                     placeholder: (context, url) => const Padding(
                       padding: EdgeInsets.all(10.0),
@@ -127,10 +135,12 @@ class Blogtile extends StatelessWidget {
                     errorWidget: (context, url, error) =>
                         const Icon(Icons.error),
                   ),
-                  // child: f_b.BlurHash(
-                  //   hash: 'hashed',
-                  //   image: imageUrl,
-                  //   imageFit: BoxFit.cover,
+                  // child: SizedBox(
+                  //   child: BlurHash(
+                  //     hash: 'LGF5]+Yk^6#M@-5c,1J5@[or[Q6.',
+                  //     image: widget.imageUrl,
+                  //     imageFit: BoxFit.cover,
+                  //   ),
                   // ),
                 ),
               ),
@@ -158,7 +168,7 @@ class Blogtile extends StatelessWidget {
                     ),
                     child: SizedBox(
                       child: SelectableText(
-                        title,
+                        widget.title,
                         maxLines: null,
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
@@ -176,7 +186,7 @@ class Blogtile extends StatelessWidget {
             height: 10,
           ),
           SelectableText(
-            desc,
+            widget.desc,
             style: const TextStyle(
               color: Colors.grey,
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:news_app/views/home.dart';
+//import 'package:news_app/views/home.dart';
+import 'package:news_app/views/splash.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
             .copyWith(background: Colors.black87),
       ),
-      home: const Home(),
+      home: const Splash(),
     );
   }
 }
