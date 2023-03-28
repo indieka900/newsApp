@@ -167,7 +167,7 @@ class _CategoryViewsState extends State<CategoryViews> {
                             imageUrl: articles[index].urlToImage,
                             title: articles[index].title,
                             desc: articles[index].description,
-                            url: articles[index].url,
+                            url: articles[index].url, ///hashed: '',
                           );
                         },
                       ),

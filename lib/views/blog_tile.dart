@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:news_app/views/article.dart';
+import 'package:flutter_blurhash/flutter_blurhash.dart' as f_b;
 
 final nowday = DateTime.now();
 final format = DateFormat('h:mm a');
@@ -18,7 +19,7 @@ class Blogtile extends StatelessWidget {
     required this.desc,
     required this.url,
     required this.now,
-    required this.auther,
+    required this.auther, //required this.hashed,
   });
 
   @override
@@ -69,7 +70,8 @@ class Blogtile extends StatelessWidget {
             children: [
               const CircleAvatar(
                 backgroundImage: NetworkImage(
-                    'https://media.istockphoto.com/id/1390033645/photo/world-news-background-which-can-be-used-for-broadcast-news.jpg?b=1&s=170667a&w=0&k=20&c=glqFWZtWU4Zqyxd8CRu5_Or81zqwe7cyhturXaIFEOA='),
+                  'https://media.istockphoto.com/id/1390033645/photo/world-news-background-which-can-be-used-for-broadcast-news.jpg?b=1&s=170667a&w=0&k=20&c=glqFWZtWU4Zqyxd8CRu5_Or81zqwe7cyhturXaIFEOA=',
+                ),
               ),
               const SizedBox(
                 width: 20,
@@ -125,24 +127,45 @@ class Blogtile extends StatelessWidget {
                     errorWidget: (context, url, error) =>
                         const Icon(Icons.error),
                   ),
+                  // child: f_b.BlurHash(
+                  //   hash: 'hashed',
+                  //   image: imageUrl,
+                  //   imageFit: BoxFit.cover,
+                  // ),
                 ),
               ),
               Positioned(
-                top: 100,
                 bottom: 0,
-                left: 0,
-                right: 0,
                 child: Container(
+                  width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   decoration: const BoxDecoration(
-                    color: Colors.black54,
+                    gradient: LinearGradient(
+                      colors: [
+                        Color.fromARGB(209, 0, 0, 0),
+                        Color.fromARGB(185, 0, 0, 0),
+                        Color.fromARGB(108, 15, 14, 14),
+                        Colors.transparent,
+                      ],
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                    ),
                   ),
-                  child: SelectableText(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      fontSize: 20,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      right: 28.0,
+                      bottom: 5,
+                    ),
+                    child: SizedBox(
+                      child: SelectableText(
+                        title,
+                        maxLines: null,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
                     ),
                   ),
                 ),

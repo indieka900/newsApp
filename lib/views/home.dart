@@ -28,6 +28,7 @@ class _HomeState extends State<Home> {
   List<ArticleModel> finalarticles = <ArticleModel>[];
   final _textController = TextEditingController();
   int _page = 1;
+  String hashed = '';
 
   bool _loading = true;
   bool _loading1 = false;
@@ -59,6 +60,10 @@ class _HomeState extends State<Home> {
     try {
       await newsClass.getNews(_page);
       List<ArticleModel> newArticles = newsClass.news;
+      // for (var article in newArticles) {
+      //   hashed = await generateImageHash(article.urlToImage);
+      //   //article.hash = hashed; // Assign the hash to the article object
+      // }
       setState(() {
         if (_page == 1) {
           articles = newArticles;
@@ -70,6 +75,7 @@ class _HomeState extends State<Home> {
     } catch (e) {
       setState(() {
         _errorMessage = "Failed to load news: \n${e.toString()}";
+        print(_errorMessage);
         _loading = false;
       });
     }
@@ -80,6 +86,7 @@ class _HomeState extends State<Home> {
       _page++;
       setState(() {
         _loading1 = true;
+        articles.clear();
       });
       await getNews();
       setState(() {
@@ -237,7 +244,7 @@ class _HomeState extends State<Home> {
                         decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(50)),
-                        child: Text(
+                        child: SelectableText(
                           _errorMessage,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
@@ -281,6 +288,7 @@ class _HomeState extends State<Home> {
                                     desc: articles[index].description,
                                     url: articles[index].url,
                                     now: articles[index].publishAT,
+                                    //hashed: hashed,
                                   );
                                 },
                               ),
@@ -301,11 +309,13 @@ class _HomeState extends State<Home> {
                       ),
                     ),
             ),
-      floatingActionButton: !_loading ? FloatingActionButton(
-        onPressed: () => loadmore(),
-        backgroundColor: Colors.green,
-        child: const Icon(Icons.refresh),
-      ) : null,
+      floatingActionButton: !_loading
+          ? FloatingActionButton(
+              onPressed: () => loadmore(),
+              backgroundColor: Colors.green,
+              child: const Icon(Icons.refresh),
+            )
+          : null,
     );
   }
 }

@@ -151,7 +151,7 @@ class _NewsSorcesState extends State<NewsSorces> {
                             title: articles[index].title,
                             desc: articles[index].description,
                             url: articles[index].url,
-                            now: articles[index].publishAT,
+                            now: articles[index].publishAT, //hashed: '',
                           ),
                         );
                       },

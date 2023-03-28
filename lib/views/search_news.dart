@@ -150,7 +150,7 @@ class _SearchedState extends State<Searched> {
                             title: articles[index].title,
                             desc: articles[index].description,
                             url: articles[index].url,
-                            now: articles[index].publishAT,
+                            now: articles[index].publishAT, //hashed: '',
                           );
                         },
                       ),
