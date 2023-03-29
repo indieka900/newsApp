@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:blurhash/blurhash.dart';
-import 'package:flutter/services.dart';
 
 import '../model/article_model.dart';
 import 'package:http/http.dart' as http;
@@ -20,8 +18,7 @@ class News {
       '/v2/top-headlines',
       {
         "language": "en",
-        //'from': yesterdayDate,
-        'sortBy': 'popularity',
+        'sortBy': 'publishedAt',
         'page': page.toString(),
         'apiKey': 'b0c9a7feca8743bbaf4fe054f22359d1',
       },
@@ -174,12 +171,3 @@ class SearchNews {
   }
 }
 
-Future<String> generateImageHash() async {
-  String imgurl =
-      'https://media.istockphoto.com/id/1390033645/photo/world-news-background-which-can-be-used-for-broadcast-news.jpg?b=1&s=170667a&w=0&k=20&c=glqFWZtWU4Zqyxd8CRu5_Or81zqwe7cyhturXaIFEOA=';
-  ByteData bytes = await NetworkAssetBundle(Uri.parse(imgurl)).load(imgurl);
-  Uint8List pixels = bytes.buffer.asUint8List();
-  var blurHash = await BlurHash.encode(pixels, 4, 3);
-  print(blurHash);
-  return blurHash;
-}

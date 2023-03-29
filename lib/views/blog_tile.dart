@@ -92,7 +92,6 @@ class _BlogtileState extends State<Blogtile> {
                       decoration: TextDecoration.underline,
                       decorationThickness: 1.2,
                       fontWeight: FontWeight.w700,
-                      //decorationStyle: TextDecorationStyle.dashed,
                       decorationColor: Colors.white,
                     ),
                   ),
